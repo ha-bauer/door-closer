@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include "RTClib.h"
 
+#include "ClockReader.h"
+
 class ExecutionDecider
 {
     int hourOfExecution = 0;

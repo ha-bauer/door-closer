@@ -15,8 +15,9 @@ const int hourOfExecution = 4;
 const int minuteOfExecution = 30;
 
 static volatile uint32_t watchdogTickCounter = 0;
+static ClockReader clockReader;
 
-static ExecutionDecider executionDecider = ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution);
+static ExecutionDecider executionDecider = ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution, clockReader);
 
 ISR(WDT_vect)
 {

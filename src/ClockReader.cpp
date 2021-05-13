@@ -1,5 +1,7 @@
-#include "ClockReader.h"
+#include <Arduino.h>
 #include "RTClib.h"
+
+#include "ClockReader.h"
 
 void ClockReader::rtcOn(int inputDelayMilliseconds)
 {
