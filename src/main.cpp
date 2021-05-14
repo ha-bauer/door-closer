@@ -26,29 +26,25 @@ ISR(WDT_vect)
 }
 
 void enter_sleep(void)
-{                                        /* Arduino schlafen legen */
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN); /* Es geht auch SLEEP_MODE_PWR_DOWN */
+{                                        
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
     sleep_enable();
-    power_adc_disable();    /* Analog-Eingaenge abschalten */
-    power_spi_disable();    /* SPI abschalten */
-    power_timer0_disable(); /* Timer0 abschalten */
-    power_timer2_disable(); /* Timer0 abschalten */
-    power_twi_disable();    /* TWI abschalten */
+    power_adc_disable();
+    power_spi_disable();
+    power_timer0_disable();
+    power_timer2_disable();
+    power_twi_disable();
     sleep_mode();
     sleep_disable();
-    power_all_enable(); /* Komponenten wieder aktivieren */
+    power_all_enable();
 }
 
 void startWatchdogTimer()
 {
-    MCUSR &= ~(1 << WDRF);              /* WDT reset flag loeschen */
-    WDTCSR |= (1 << WDCE) | (1 << WDE); /* WDCE setzen, Zugriff auf Presclaler etc. */
-    WDTCSR = 1 << WDP0 | 1 << WDP3;     /* Prescaler auf 8.0 s */
-    WDTCSR |= _BV(WDIE);                /* WDT Interrupt freigeben */
-
-    //WDTCSR  = (0<<WDP3) | (1<<WDP2) | (1<<WDP1) | (1<<WDP0);
-    // Enable the WD interrupt (note: no reset).
-    //WDTCSR |= _BV(WDIE);
+    MCUSR &= ~(1 << WDRF);              /* Deletes WDT reset flag */
+    WDTCSR |= (1 << WDCE) | (1 << WDE); /* Sets WDCE , access to presclaler etc. */
+    WDTCSR = 1 << WDP0 | 1 << WDP3;     /* Prescaler to 8.0s */
+    WDTCSR |= _BV(WDIE);                /* Allow WDT interrupt */
 }
 
 void setup()
@@ -84,7 +80,7 @@ void closeDoor()
         delayMicroseconds(delayLow);
     }
 
-    delay(1000); // One second delay
+    delay(1000);
 
     digitalWrite(dirPin, HIGH);
     for (int x = 0; x < stepsPerRevolution * numRotations; x++)
@@ -108,16 +104,6 @@ void loop()
     {
         closeDoor();
     }
-
-    // blink(13);
-    // rtcOn(1000);
-    // delay(2000);
-
-    // blink(13);
-    // rtcOff();
-
-    // delay(2000);
-    // blink(13);
 
     enter_sleep();
 }
