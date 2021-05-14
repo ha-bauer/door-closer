@@ -2,8 +2,9 @@
 #define CLOCK_READER_H
 
 #include "RTClib.h"
+#include "ClockReaderBase.h"
 
-class ClockReader
+class ClockReader : public ClockReaderBase
 {
     RTC_DS3231 clock;
 

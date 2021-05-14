@@ -2,7 +2,9 @@
 #include <avr/sleep.h>
 #include <avr/power.h>
 #include <avr/wdt.h>
+
 #include "ExecutionDecider.h"
+#include "ClockReaderBase.h"
 
 const int stepPin = 10;
 const int dirPin = 11;
@@ -15,8 +17,7 @@ const int hourOfExecution = 4;
 const int minuteOfExecution = 30;
 
 static volatile uint32_t watchdogTickCounter = 0;
-static ClockReader clockReader;
-
+static ClockReaderBase clockReader = ClockReader();
 static ExecutionDecider executionDecider = ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution, clockReader);
 
 ISR(WDT_vect)

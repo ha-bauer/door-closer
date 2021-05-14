@@ -1,8 +1,10 @@
-#include "ExecutionDecider.h"
-#include "ClockReader.h"
 #include "RTClib.h"
 
-ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcCheckIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReader clockReader)
+#include "ExecutionDecider.h"
+#include "ClockReader.h"
+#include "ClockReaderBase.h"
+
+ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcCheckIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase clockReader)
 {
     this->secondsPerSleepCycle = secondsPerSleepCycle;
     this->rtcCheckIntervalInCycles = rtcCheckIntervalInCycles;

@@ -5,6 +5,7 @@
 #include "RTClib.h"
 
 #include "ClockReader.h"
+#include "ClockReaderBase.h"
 
 class ExecutionDecider
 {
@@ -23,14 +24,14 @@ class ExecutionDecider
     DateTime timeOfNextExecution;
     bool shouldExecute = false;
 
-    ClockReader clockReader;
+    ClockReaderBase clockReader;
 
     DateTime calculateTimeOfNextExecution(DateTime now);
     DateTime activateRtcClockAndReadTime();
     void syncWithRtcAndResetCounters();
 
 public:
-    ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcCheckIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReader clockReader);
+    ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcCheckIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase clockReader);
     void watchdogInterruptHappened(uint32_t watchdogTickCounter);
     bool shouldWeExecute();
 };
