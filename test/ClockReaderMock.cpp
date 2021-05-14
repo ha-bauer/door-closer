@@ -1,4 +1,4 @@
-#include "RTClib.h"
+#include <RTClib.h>
 #include "ClockReaderMock.h"
 
 DateTime ClockReaderMock::activateRtcClockAndReadTime()

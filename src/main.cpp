@@ -2,7 +2,6 @@
 #include <avr/sleep.h>
 #include <avr/power.h>
 #include <avr/wdt.h>
-
 #include "ExecutionDecider.h"
 #include "ClockReaderBase.h"
 

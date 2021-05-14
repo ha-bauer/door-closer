@@ -1,7 +1,7 @@
 #ifndef EXECUTION_DECIDER_H
 #define EXECUTION_DECIDER_H
 
-#include "RTClib.h"
+#include <RTClib.h>
 #include "ClockReader.h"
 #include "ClockReaderBase.h"
 
