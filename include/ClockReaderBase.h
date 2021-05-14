@@ -1,5 +1,5 @@
-#ifndef ABSTRACT_CLOCK_READER_H
-#define ABSTRACT_CLOCK_READER_H
+#ifndef CLOCK_READER_BASE_H
+#define CLOCK_READER_BASE_H
 
 #include "RTClib.h"
 

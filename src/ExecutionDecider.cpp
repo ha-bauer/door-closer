@@ -47,6 +47,7 @@ DateTime ExecutionDecider::calculateTimeOfNextExecution(DateTime now)
     {
         TimeSpan oneDay = TimeSpan(1, 0, 0, 0);
         DateTime executionTimeTomorrow = todaysExecutionTime + oneDay;
+        return executionTimeTomorrow;
     }
 }
 
