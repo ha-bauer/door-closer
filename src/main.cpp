@@ -47,14 +47,6 @@ void startWatchdogTimer()
     WDTCSR |= _BV(WDIE);                /* Allow WDT interrupt */
 }
 
-void setup()
-{
-    Serial.begin(9600);
-    Serial.println("Setup...");
-
-    startWatchdogTimer();
-}
-
 void blink(int pin)
 {
     pinMode(pin, OUTPUT);
@@ -94,6 +86,16 @@ void closeDoor()
     digitalWrite(8, LOW);
 }
 
+#ifndef UNIT_TEST
+
+void setup()
+{
+    Serial.begin(9600);
+    Serial.println("Setup...");
+
+    startWatchdogTimer();
+}
+
 void loop()
 {
     //Serial.println("loop");
@@ -107,3 +109,5 @@ void loop()
 
     enter_sleep();
 }
+
+#endif

@@ -1,5 +1,6 @@
 #include <unity.h>
-
+#include "ExecutionDecider.h"
+#include "ClockReaderMock.h"
 
 // void setUp(void) {
 // // set stuff up here
@@ -9,11 +10,23 @@
 // // clean stuff up here
 // }
 
-void test_function1(void) {
+void test_function1(void)
+{
+    int hourOfExecution = 1;
+    int minuteOfExecution = 1;
+    ClockReaderBase clockReaderMock = ClockReaderMock();
+    ExecutionDecider executionDecider = ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution, clockReaderMock);
+
+    // if (executionDecider.shouldWeExecute())
+    // {
+    //     TEST_ASSERT_EQUAL(32, 32);
+    // }
+
     TEST_ASSERT_EQUAL(32, 32);
 }
 
-void doTestExecution() {
+void doTestExecution()
+{
     UNITY_BEGIN();
 
     RUN_TEST(test_function1);
@@ -24,7 +37,8 @@ void doTestExecution() {
 #ifdef ARDUINO
 
 #include <Arduino.h>
-void setup() {
+void setup()
+{
     // NOTE!!! Wait for >2 secs
     // if board doesn't support software reset via Serial.DTR/RTS
     delay(2000);
@@ -32,7 +46,8 @@ void setup() {
     doTestExecution();
 }
 
-void loop() {
+void loop()
+{
     digitalWrite(13, HIGH);
     delay(100);
     digitalWrite(13, LOW);
@@ -41,7 +56,8 @@ void loop() {
 
 #else
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     doTestExecution();
     return 0;
 }
