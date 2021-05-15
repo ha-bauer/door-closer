@@ -1,9 +1,15 @@
 #ifndef EXECUTION_DECIDER_H
 #define EXECUTION_DECIDER_H
 
-#include <RTClib.h>
 #include "ClockReader.h"
 #include "ClockReaderBase.h"
+
+#ifndef UNIT_TEST
+    #include <RTClib.h>
+#else
+    #include "DateTime.h"
+    using namespace DateTimeUnitTesting;
+#endif
 
 class ExecutionDecider
 {

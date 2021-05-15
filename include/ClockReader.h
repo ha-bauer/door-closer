@@ -1,3 +1,5 @@
+#ifndef UNIT_TEST
+
 #ifndef CLOCK_READER_H
 #define CLOCK_READER_H
 
@@ -15,4 +17,5 @@ class ClockReader : public ClockReaderBase
     DateTime activateRtcClockAndReadTime();
 };
 
+#endif
 #endif

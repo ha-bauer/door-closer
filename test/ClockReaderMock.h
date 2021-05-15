@@ -1,8 +1,10 @@
 #ifndef CLOCK_READER_MOCK_H
 #define CLOCK_READER_MOCK_H
 
-#include <RTClib.h>
+#include "DateTime.h"
 #include "ClockReaderBase.h"
+
+using namespace DateTimeUnitTesting;
 
 class ClockReaderMock : public ClockReaderBase
 {

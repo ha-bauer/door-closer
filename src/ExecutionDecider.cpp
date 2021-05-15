@@ -1,7 +1,13 @@
-#include <RTClib.h>
 #include "ExecutionDecider.h"
-#include "ClockReader.h"
 #include "ClockReaderBase.h"
+
+#ifndef UNIT_TEST
+    #include <RTClib.h>
+#else
+    #include "DateTime.h"
+    #include "TimeSpan.h"
+    using namespace DateTimeUnitTesting;
+#endif
 
 ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcCheckIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase clockReader)
 {
@@ -12,25 +18,25 @@ ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcCheckIn
     this->clockReader = clockReader;
 }
 
-void printStatistics(long measuredSeconds, long calculatedSeconds)
-{
-    Serial.print("measured seconds: ");
-    Serial.print(measuredSeconds);
-    Serial.print("  calculated seconds: ");
-    Serial.print(calculatedSeconds);
-    Serial.print("  difference: ");
-    Serial.print(calculatedSeconds - measuredSeconds);
+// void printStatistics(long measuredSeconds, long calculatedSeconds)
+// {
+//     Serial.print("measured seconds: ");
+//     Serial.print(measuredSeconds);
+//     Serial.print("  calculated seconds: ");
+//     Serial.print(calculatedSeconds);
+//     Serial.print("  difference: ");
+//     Serial.print(calculatedSeconds - measuredSeconds);
 
-    if (measuredSeconds != 0)
-    {
-        double deviation = double((calculatedSeconds - measuredSeconds) * 100) / measuredSeconds;
-        Serial.print("  deviation (%): ");
-        Serial.print(String(deviation, 4));
-    }
+//     if (measuredSeconds != 0)
+//     {
+//         double deviation = double((calculatedSeconds - measuredSeconds) * 100) / measuredSeconds;
+//         Serial.print("  deviation (%): ");
+//         Serial.print(String(deviation, 4));
+//     }
 
-    Serial.println("");
-    Serial.flush();
-}
+//     Serial.println("");
+//     Serial.flush();
+// }
 
 DateTime ExecutionDecider::calculateTimeOfNextExecution(DateTime now)
 {

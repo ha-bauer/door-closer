@@ -1,3 +1,5 @@
+#ifndef UNIT_TEST
+
 #include <Arduino.h>
 #include <avr/sleep.h>
 #include <avr/power.h>
@@ -84,8 +86,6 @@ void closeDoor()
 
     digitalWrite(8, LOW);
 }
-
-#ifndef UNIT_TEST
 
 void setup()
 {

@@ -1,5 +1,7 @@
-#include <RTClib.h>
+#include "DateTime.h"
 #include "ClockReaderMock.h"
+
+using namespace DateTimeUnitTesting;
 
 DateTime ClockReaderMock::activateRtcClockAndReadTime()
 {

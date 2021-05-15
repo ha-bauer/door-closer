@@ -1,3 +1,5 @@
+#ifndef UNIT_TEST
+
 #include <Arduino.h>
 #include <RTClib.h>
 #include "ClockReader.h"
@@ -30,3 +32,5 @@ DateTime ClockReader::activateRtcClockAndReadTime()
 
     return now;
 }
+
+#endif
