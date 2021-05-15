@@ -7,20 +7,19 @@
 // }
 
 // void tearDown(void) {
-// // clean stuff up here
-// }
-
+// 
 void test_function1(void)
 {
-    int hourOfExecution = 1;
-    int minuteOfExecution = 1;
+    int someHourOfExecution = 5;
+    int someMinuteOfExecution = 30;
     ClockReaderBase clockReaderMock = ClockReaderMock();
-    ExecutionDecider executionDecider = ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution, clockReaderMock);
+    ExecutionDecider executionDecider = ExecutionDecider(8, 450, someHourOfExecution, someMinuteOfExecution, clockReaderMock);
 
-    // if (executionDecider.shouldWeExecute())
-    // {
-    //     TEST_ASSERT_EQUAL(32, 32);
-    // }
+    executionDecider.watchdogInterruptHappened(1)
+    if (executionDecider.shouldWeExecute())
+    {
+        TEST_ASSERT_EQUAL(32, 32);
+    }
 
     TEST_ASSERT_EQUAL(32, 32);
 }

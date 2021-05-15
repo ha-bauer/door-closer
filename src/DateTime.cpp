@@ -1,3 +1,5 @@
+#ifndef ARDUINO
+
 #include "DateTime.h"
 #include "TimeSpan.h"
 
@@ -573,3 +575,5 @@ namespace DateTimeUnitTesting
                 right.second() == ss);
     }
 }
+
+#endif

@@ -1,3 +1,5 @@
+#ifdef ARDUINO
+
 #ifndef DATE_TIME_H
 #define DATE_TIME_H
 
@@ -154,4 +156,5 @@ namespace DateTimeUnitTesting
     };
 }
 
+#endif
 #endif

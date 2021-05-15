@@ -1,3 +1,5 @@
+#ifdef ARDUINO
+
 #include <stdint.h>
 #include "TimeSpan.h"
 
@@ -58,3 +60,5 @@ namespace DateTimeUnitTesting
         return TimeSpan(_seconds - right._seconds);
     }
 }
+
+#endif

@@ -1,7 +1,7 @@
 #include "ExecutionDecider.h"
 #include "ClockReaderBase.h"
 
-#ifndef UNIT_TEST
+#ifdef ARDUINO
     #include <RTClib.h>
 #else
     #include "DateTime.h"
@@ -9,10 +9,10 @@
     using namespace DateTimeUnitTesting;
 #endif
 
-ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcCheckIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase clockReader)
+ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase clockReader)
 {
     this->secondsPerSleepCycle = secondsPerSleepCycle;
-    this->rtcCheckIntervalInCycles = rtcCheckIntervalInCycles;
+    this->rtcSyncIntervalInCycles = rtcSyncIntervalInCycles;
     this->hourOfExecution = hourOfExecution;
     this->minuteOfExecution = minuteOfExecution;
     this->clockReader = clockReader;
@@ -90,7 +90,7 @@ void ExecutionDecider::watchdogInterruptHappened(uint32_t watchdogTickCounter)
         shouldExecute = false;
     }
 
-    bool shouldSyncWithRtcClock = ((watchdogTicksSinceSync - 1) % this->rtcCheckIntervalInCycles == 0);
+    bool shouldSyncWithRtcClock = ((watchdogTicksSinceSync - 1) % this->rtcSyncIntervalInCycles == 0);
     if (shouldSyncWithRtcClock)
     {
         syncWithRtcAndResetCounters();

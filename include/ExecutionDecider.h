@@ -4,7 +4,7 @@
 #include "ClockReader.h"
 #include "ClockReaderBase.h"
 
-#ifndef UNIT_TEST
+#ifdef ARDUINO
     #include <RTClib.h>
 #else
     #include "DateTime.h"
@@ -17,7 +17,7 @@ class ExecutionDecider
     int minuteOfExecution = 0;
 
     int secondsPerSleepCycle;
-    int rtcCheckIntervalInCycles;
+    int rtcSyncIntervalInCycles;
     uint32_t watchdogTickCounterAtSync = 0;
     uint32_t watchdogTicksSinceSync;
     uint32_t unixtimeAtSync;
@@ -35,7 +35,7 @@ class ExecutionDecider
     void syncWithRtcAndResetCounters();
 
 public:
-    ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcCheckIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase clockReader);
+    ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase clockReader);
     void watchdogInterruptHappened(uint32_t watchdogTickCounter);
     bool shouldWeExecute();
 };

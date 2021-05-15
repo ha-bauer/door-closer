@@ -1,4 +1,4 @@
-#ifndef UNIT_TEST
+#ifdef ARDUINO
 
 #ifndef CLOCK_READER_H
 #define CLOCK_READER_H

@@ -1,4 +1,4 @@
-#ifndef UNIT_TEST
+#ifdef ARDUINO
 
 #include <Arduino.h>
 #include <RTClib.h>
