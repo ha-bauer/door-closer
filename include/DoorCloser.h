@@ -3,7 +3,7 @@
 #ifndef DOOR_CLOSER_H
 #define DOOR_CLOSER_H
 
-#include <Arduio.h>
+#include <Arduino.h>
 
 struct doorCloserConfig
 {
