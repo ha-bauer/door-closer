@@ -6,6 +6,7 @@
 #include <avr/wdt.h>
 #include "ExecutionDecider.h"
 #include "ClockReaderBase.h"
+#include "DoorCloser.h"
 
 const int stepPin = 10;
 const int dirPin = 11;
@@ -18,26 +19,47 @@ const int hourOfExecution = 18;
 const int minuteOfExecution = 50;
 
 static volatile uint32_t watchdogTickCounter = 0;
-static ClockReader clockReader = ClockReader();
-static ExecutionDecider executionDecider = ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution, &clockReader);
+static ClockReader clockReader;
+static ExecutionDecider executionDecider;
+static DoorCloser doorCloser;
+
+void enter_sleep(void);
+void startWatchdogTimer();
+
+void setup()
+{
+    Serial.begin(9600);
+    Serial.println("Setup...");
+    startWatchdogTimer();
+
+    static struct doorCloserConfig closerConfig;
+    closerConfig.stepPin = stepPin;
+    closerConfig.dirPin = dirPin;
+    closerConfig.delayHigh = delayHigh;
+    closerConfig.delayLow = delayLow;
+    closerConfig.stepsPerRevolution = stepsPerRevolution;
+    closerConfig.numRotations = numRotations;
+
+    doorCloser = DoorCloser(closerConfig);
+    executionDecider =  ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution, &clockReader);
+    clockReader = ClockReader();
+}
+
+void loop()
+{
+    executionDecider.watchdogInterruptHappened(watchdogTickCounter);
+
+    if (executionDecider.shouldWeExecute())
+    {
+        doorCloser.closeDoor();
+    }
+
+    enter_sleep();
+}
 
 ISR(WDT_vect)
 {
     watchdogTickCounter++;
-}
-
-void enter_sleep(void)
-{                                        
-    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-    sleep_enable();
-    power_adc_disable();
-    power_spi_disable();
-    power_timer0_disable();
-    power_timer2_disable();
-    power_twi_disable();
-    sleep_mode();
-    sleep_disable();
-    power_all_enable();
 }
 
 void startWatchdogTimer()
@@ -48,65 +70,18 @@ void startWatchdogTimer()
     WDTCSR |= _BV(WDIE);                /* Allow WDT interrupt */
 }
 
-void blink(int pin)
+void enter_sleep(void)
 {
-    pinMode(pin, OUTPUT);
-    digitalWrite(pin, HIGH);
-    delay(100);
-    digitalWrite(pin, LOW);
-}
-
-void closeDoor()
-{
-    pinMode(8, OUTPUT);
-    digitalWrite(8, HIGH);
-
-    pinMode(stepPin, OUTPUT);
-    pinMode(dirPin, OUTPUT);
-
-    digitalWrite(dirPin, LOW);
-    for (int x = 0; x < stepsPerRevolution * numRotations; x++)
-    {
-        digitalWrite(stepPin, HIGH);
-        delayMicroseconds(delayHigh);
-        digitalWrite(stepPin, LOW);
-        delayMicroseconds(delayLow);
-    }
-
-    delay(1000);
-
-    digitalWrite(dirPin, HIGH);
-    for (int x = 0; x < stepsPerRevolution * numRotations; x++)
-    {
-        digitalWrite(stepPin, HIGH);
-        delayMicroseconds(delayHigh);
-        digitalWrite(stepPin, LOW);
-        delayMicroseconds(delayLow);
-    }
-
-    digitalWrite(8, LOW);
-}
-
-void setup()
-{
-    Serial.begin(9600);
-    Serial.println("Setup...");
-
-    startWatchdogTimer();
-}
-
-void loop()
-{
-    //Serial.println("loop");
-
-    executionDecider.watchdogInterruptHappened(watchdogTickCounter);
-
-    if (executionDecider.shouldWeExecute())
-    {
-        closeDoor();
-    }
-
-    enter_sleep();
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+    sleep_enable();
+    power_adc_disable();
+    power_spi_disable();
+    power_timer0_disable();
+    power_timer2_disable();
+    power_twi_disable();
+    sleep_mode();
+    sleep_disable();
+    power_all_enable();
 }
 
 #endif
