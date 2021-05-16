@@ -1,7 +1,11 @@
-#include "DateTime.h"
 #include "ClockReaderMock.h"
 
-using namespace DateTimeUnitTesting;
+#ifdef ARDUINO
+    #include <RTClib.h>
+#else
+    #include "DateTime.h"
+    using DateTimeUnitTesting::DateTime;
+#endif
 
 DateTime ClockReaderMock::activateRtcClockAndReadTime()
 {

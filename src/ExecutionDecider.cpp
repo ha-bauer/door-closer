@@ -2,20 +2,22 @@
 #include "ClockReaderBase.h"
 
 #ifdef ARDUINO
-    #include <RTClib.h>
+#include <RTClib.h>
 #else
-    #include "DateTime.h"
-    #include "TimeSpan.h"
-    using namespace DateTimeUnitTesting;
+#include <iostream>
+#include "DateTime.h"
+#include "TimeSpan.h"
+using namespace DateTimeUnitTesting;
 #endif
 
-ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase clockReader)
+ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase* clockReader)
 {
     this->secondsPerSleepCycle = secondsPerSleepCycle;
     this->rtcSyncIntervalInCycles = rtcSyncIntervalInCycles;
     this->hourOfExecution = hourOfExecution;
     this->minuteOfExecution = minuteOfExecution;
     this->clockReader = clockReader;
+    this->deviationFactor = 1.0;
 }
 
 // void printStatistics(long measuredSeconds, long calculatedSeconds)
@@ -40,8 +42,7 @@ ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncInt
 
 DateTime ExecutionDecider::calculateTimeOfNextExecution(DateTime now)
 {
-    DateTime todaysExecutionTime =
-        DateTime(now.year(), now.month(), now.day(), hourOfExecution, minuteOfExecution, 0);
+    DateTime todaysExecutionTime = DateTime(now.year(), now.month(), now.day(), hourOfExecution, minuteOfExecution, 0);
 
     bool isNextExecutionToday = todaysExecutionTime >= now;
     if (isNextExecutionToday)
@@ -58,18 +59,28 @@ DateTime ExecutionDecider::calculateTimeOfNextExecution(DateTime now)
 
 void ExecutionDecider::syncWithRtcAndResetCounters()
 {
-    DateTime now = clockReader.activateRtcClockAndReadTime();
+    DateTime now = clockReader->activateRtcClockAndReadTime();
     uint32_t unixtimeNow = now.unixtime();
 
     uint32_t actualSecondsSinceSync = unixtimeNow - unixtimeAtSync;
     deviationFactor = calculatedSecondsSinceSync / actualSecondsSinceSync;
 
     unixtimeAtSync = unixtimeNow;
-    watchdogTicksSinceSync = 0;
+    watchdogTickCounterAtSync = watchdogTicksCurrently;
 }
 
 void ExecutionDecider::watchdogInterruptHappened(uint32_t watchdogTickCounter)
 {
+    if (watchdogTickCounter == 0)
+    {
+        DateTime now = clockReader->activateRtcClockAndReadTime();
+        uint32_t unixtimeNow = now.unixtime();
+
+        timeOfNextExecution = calculateTimeOfNextExecution(now);
+        unixtimeAtSync = unixtimeNow;
+        watchdogTickCounterAtSync = watchdogTickCounter;
+    }
+
     watchdogTicksSinceSync = watchdogTickCounter - watchdogTickCounterAtSync;
 
     calculatedSecondsSinceSync =
@@ -90,7 +101,7 @@ void ExecutionDecider::watchdogInterruptHappened(uint32_t watchdogTickCounter)
         shouldExecute = false;
     }
 
-    bool shouldSyncWithRtcClock = ((watchdogTicksSinceSync - 1) % this->rtcSyncIntervalInCycles == 0);
+    bool shouldSyncWithRtcClock = (watchdogTicksSinceSync > 0 && watchdogTicksSinceSync % this->rtcSyncIntervalInCycles == 0);
     if (shouldSyncWithRtcClock)
     {
         syncWithRtcAndResetCounters();

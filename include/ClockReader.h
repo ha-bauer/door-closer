@@ -14,7 +14,7 @@ class ClockReader : public ClockReaderBase
     void rtcOff();
 
   public:
-    DateTime activateRtcClockAndReadTime();
+    DateTime activateRtcClockAndReadTime() override;
 };
 
 #endif

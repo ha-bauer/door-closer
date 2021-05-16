@@ -1,5 +1,3 @@
-#ifndef ARDUINO
-
 #include "DateTime.h"
 #include "TimeSpan.h"
 
@@ -129,7 +127,7 @@ namespace DateTimeUnitTesting
                        uint8_t min, uint8_t sec)
     {
         if (year >= 2000U)
-            year -= 2000U;
+           year -= 2000U;
         yOff = year;
         m = month;
         d = day;
@@ -575,5 +573,3 @@ namespace DateTimeUnitTesting
                 right.second() == ss);
     }
 }
-
-#endif

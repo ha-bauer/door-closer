@@ -13,29 +13,30 @@
 
 class ExecutionDecider
 {
-    int hourOfExecution = 0;
-    int minuteOfExecution = 0;
+    int hourOfExecution;
+    int minuteOfExecution;
 
     int secondsPerSleepCycle;
     int rtcSyncIntervalInCycles;
-    uint32_t watchdogTickCounterAtSync = 0;
+    uint32_t watchdogTickCounterAtSync;
     uint32_t watchdogTicksSinceSync;
+    uint32_t watchdogTicksCurrently;
     uint32_t unixtimeAtSync;
     uint32_t calculatedSecondsSinceSync;
 
-    double deviationFactor = 1;
+    double deviationFactor;
 
     DateTime timeOfNextExecution;
     bool shouldExecute = false;
 
-    ClockReaderBase clockReader;
+    ClockReaderBase* clockReader;
 
     DateTime calculateTimeOfNextExecution(DateTime now);
     DateTime activateRtcClockAndReadTime();
     void syncWithRtcAndResetCounters();
 
 public:
-    ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase clockReader);
+    ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase* clockReader);
     void watchdogInterruptHappened(uint32_t watchdogTickCounter);
     bool shouldWeExecute();
 };

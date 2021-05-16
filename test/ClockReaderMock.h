@@ -1,17 +1,21 @@
 #ifndef CLOCK_READER_MOCK_H
 #define CLOCK_READER_MOCK_H
 
-#include "DateTime.h"
 #include "ClockReaderBase.h"
 
-using namespace DateTimeUnitTesting;
+#ifdef ARDUINO
+    #include <RTClib.h>
+#else
+    #include "DateTime.h"
+    using DateTimeUnitTesting::DateTime;
+#endif
 
 class ClockReaderMock : public ClockReaderBase
 {
     DateTime now;
 
   public:
-    DateTime activateRtcClockAndReadTime();
+    DateTime activateRtcClockAndReadTime() override;
     void setCurrentDateTime(DateTime now);
 };
 

@@ -5,16 +5,13 @@
     #include <RTClib.h>
 #else
     #include "DateTime.h"
-    using namespace DateTimeUnitTesting;
+    using DateTimeUnitTesting::DateTime;
 #endif
 
 class ClockReaderBase
 {
   public:
-    virtual DateTime activateRtcClockAndReadTime()
-    {
-        return DateTime();
-    }
+    virtual DateTime activateRtcClockAndReadTime() = 0;
 };
 
 #endif
