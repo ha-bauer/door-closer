@@ -27,7 +27,7 @@ class ExecutionDecider
     double deviationFactor;
 
     DateTime timeOfNextExecution;
-    bool shouldExecute = false;
+    bool shouldExecute;
 
     ClockReaderBase* clockReader;
 

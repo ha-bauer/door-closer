@@ -15,7 +15,7 @@ class ClockReaderMock : public ClockReaderBase
     DateTime now;
 
   public:
-    DateTime activateRtcClockAndReadTime() override;
+    DateTime activateRtcClockAndReadTime();
     void setCurrentDateTime(DateTime now);
 };
 

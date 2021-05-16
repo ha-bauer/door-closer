@@ -23,6 +23,7 @@ ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncInt
     this->minuteOfExecution = minuteOfExecution;
     this->clockReader = clockReader;
     this->deviationFactor = 1.0;
+    this->shouldExecute = false;
 }
 
 DateTime ExecutionDecider::calculateTimeOfNextExecution(DateTime now)
