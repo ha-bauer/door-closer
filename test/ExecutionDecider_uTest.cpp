@@ -15,7 +15,8 @@ using DateTimeUnitTesting::DateTime;
 using DateTimeUnitTesting::TimeSpan;
 #endif
 
-void AssertExecutionDeciderTiggersCorrectly(DateTime startTime, ClockReaderMock* clockReaderMock, ExecutionDecider executionDecider, int hourOfExecution, int minuteOfExecution, int numberOfDaysToCheck, double timerInterval)
+void AssertExecutionDeciderTiggersCorrectly(DateTime startTime, ClockReaderMock* clockReaderMock, ExecutionDecider executionDecider, 
+                                            int hourOfExecution, int minuteOfExecution, int numberOfDaysToCheck, double timerInterval)
 {
     int i = 0; int numberOfDaysChecked = 0;
 
@@ -68,7 +69,7 @@ void test_Execution_Decider_Basically_Request_Execution_Correctly(void)
     DateTime currentTime = DateTime(2010, 1, 1, 4, 59, 1);
 
     AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, 
-                                           exampleHourOfExecution, exampleMinuteOfExecution, 1, 8);
+                                           exampleHourOfExecution, exampleMinuteOfExecution, 3, 8);
 }
 
 void test_Execution_Next_Day(void)
@@ -83,7 +84,7 @@ void test_Execution_Next_Day(void)
     DateTime currentTime = DateTime(2010, 1, 1, 23, 59, 3);
 
     AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, 
-                                          exampleHourOfExecution, exampleMinuteOfExecution, 1, 8);
+                                          exampleHourOfExecution, exampleMinuteOfExecution, 3, 8);
 }
 
 void test_Execution_Almost_Full_Day_Ahead(void)
@@ -98,7 +99,7 @@ void test_Execution_Almost_Full_Day_Ahead(void)
     DateTime currentTime = DateTime(2010, 1, 1, 1, 30, 0);
 
     AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, 
-                                           exampleHourOfExecution, exampleMinuteOfExecution, 1, 8);
+                                           exampleHourOfExecution, exampleMinuteOfExecution, 3, 8);
 }
 
 void test_Starting_Exactly_At_Execution_Time(void)
@@ -113,7 +114,7 @@ void test_Starting_Exactly_At_Execution_Time(void)
     DateTime currentTime = DateTime(2010, 1, 1, 1, 20, 0);
 
     AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, 
-                                           exampleHourOfExecution, exampleMinuteOfExecution, 1, 8);
+                                           exampleHourOfExecution, exampleMinuteOfExecution, 3, 8);
 }
 
 void test_With_Deviation_Of_Timer(void)
@@ -128,7 +129,7 @@ void test_With_Deviation_Of_Timer(void)
     DateTime currentTime = DateTime(2010, 1, 1, 1, 20, 0);
 
     AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, 
-                                           exampleHourOfExecution, exampleMinuteOfExecution, 1, 12);
+                                           exampleHourOfExecution, exampleMinuteOfExecution, 3, 12);
 }
 
 void test_Many_Days_With_Deviation(void)
@@ -143,7 +144,7 @@ void test_Many_Days_With_Deviation(void)
     DateTime currentTime = DateTime(2010, 1, 1, 1, 20, 0);
 
     AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, 
-                                           exampleHourOfExecution, exampleMinuteOfExecution, 1, 7);
+                                           exampleHourOfExecution, exampleMinuteOfExecution, 14, 7);
 }
 
 void doTestExecution()
