@@ -1,46 +1,19 @@
 #include <unity.h>
 #include "ExecutionDecider.h"
 #include "ClockReaderMock.h"
+#include "CrossPlatformFunctions.h"
 
 #ifdef ARDUINO
     #include <Arduino.h>
-    #define C_STR(str) str.c_str()
 #else
-    #include "DateTime.h"
     #include <sstream>
     #include <string>
-    #define String std::string
-    #define C_STR(str) str.substr(0, str.size()).c_str()
+
+    #include "DateTime.h"
+    #include "TimeSpan.h"
     using DateTimeUnitTesting::DateTime;
     using DateTimeUnitTesting::TimeSpan;
 #endif
-
-String toString(DateTime dt)
-{
-    String result;
-
-    #ifdef ARDUINO
-        //result = dt.toString("YYYY-MM-DD hh:mm:ss");
-        result = result + dt.year() + "-";
-        result = result + dt.month() + "-";
-        result = result + dt.day() + " ";
-        result = result + dt.hour() + ":";
-        result = result + dt.minute() + ":";
-        result = result + dt.second();
-
-    #else
-        std::stringstream resultStream;
-        resultStream << unsigned(dt.year()) << "-";
-        resultStream << unsigned(dt.month()) << "-";
-        resultStream << unsigned(dt.day()) << " ";
-        resultStream << unsigned(dt.hour()) << ":";
-        resultStream << unsigned(dt.minute()) << ":";
-        resultStream << unsigned(dt.second()) << " ";
-        result = resultStream.str();
-    #endif
-
-    return result;
-}
 
 void test_Execution_Decider_Basically_Request_Execution_Correctly(void)
 {

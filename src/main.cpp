@@ -14,8 +14,8 @@ const int delayLow = 800;
 const int stepsPerRevolution = 1600;
 const double numRotations = 0.5;
 
-const int hourOfExecution = 4;
-const int minuteOfExecution = 30;
+const int hourOfExecution = 18;
+const int minuteOfExecution = 50;
 
 static volatile uint32_t watchdogTickCounter = 0;
 static ClockReader clockReader = ClockReader();

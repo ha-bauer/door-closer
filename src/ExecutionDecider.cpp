@@ -1,13 +1,18 @@
 #include "ExecutionDecider.h"
 #include "ClockReaderBase.h"
+#include "CrossPlatformFunctions.h"
 
 #ifdef ARDUINO
-#include <RTClib.h>
+    #include <RTClib.h>
 #else
-#include <iostream>
-#include "DateTime.h"
-#include "TimeSpan.h"
-using namespace DateTimeUnitTesting;
+    #include <iostream>
+    #include <sstream>
+    #include <string>
+    
+    #include "DateTime.h"
+    #include "TimeSpan.h"
+    using DateTimeUnitTesting::DateTime;
+    using DateTimeUnitTesting::TimeSpan;
 #endif
 
 ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase* clockReader)
@@ -20,29 +25,17 @@ ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncInt
     this->deviationFactor = 1.0;
 }
 
-// void printStatistics(long measuredSeconds, long calculatedSeconds)
-// {
-//     Serial.print("measured seconds: ");
-//     Serial.print(measuredSeconds);
-//     Serial.print("  calculated seconds: ");
-//     Serial.print(calculatedSeconds);
-//     Serial.print("  difference: ");
-//     Serial.print(calculatedSeconds - measuredSeconds);
-
-//     if (measuredSeconds != 0)
-//     {
-//         double deviation = double((calculatedSeconds - measuredSeconds) * 100) / measuredSeconds;
-//         Serial.print("  deviation (%): ");
-//         Serial.print(String(deviation, 4));
-//     }
-
-//     Serial.println("");
-//     Serial.flush();
-// }
-
 DateTime ExecutionDecider::calculateTimeOfNextExecution(DateTime now)
 {
     DateTime todaysExecutionTime = DateTime(now.year(), now.month(), now.day(), hourOfExecution, minuteOfExecution, 0);
+
+    PRINT(INT_TO_STR(now.year()));
+
+    PRINT("Execution is today: " +
+                   toString(todaysExecutionTime) + " " +
+                   toString(now) + " " +
+                   INT_TO_STR(todaysExecutionTime.unixtime()) + " " +
+                   INT_TO_STR(now.unixtime()));
 
     bool isNextExecutionToday = todaysExecutionTime >= now;
     if (isNextExecutionToday)
@@ -104,8 +97,12 @@ void ExecutionDecider::watchdogInterruptHappened(uint32_t watchdogTickCounter)
     bool shouldSyncWithRtcClock = (watchdogTicksSinceSync > 0 && watchdogTicksSinceSync % this->rtcSyncIntervalInCycles == 0);
     if (shouldSyncWithRtcClock)
     {
+        PRINT("sync");
         syncWithRtcAndResetCounters();
     }
+
+    String msg = "Decider: " + INT_TO_STR(unixTimeAtExecution) + " " + INT_TO_STR(calculatedUnixTimeNow);
+    PRINT(msg);
 }
 
 bool ExecutionDecider::shouldWeExecute()
