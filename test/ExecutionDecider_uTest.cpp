@@ -62,11 +62,13 @@ void test_Execution_Decider_Basically_Request_Execution_Correctly(void)
     int exampleMinuteOfExecution = 1;
 
     ClockReaderMock clockReaderMock = ClockReaderMock();
-    ExecutionDecider executionDecider = ExecutionDecider(8, 450, exampleHourOfExecution, exampleMinuteOfExecution, &clockReaderMock);
+    ExecutionDecider executionDecider = 
+        ExecutionDecider(8, 450, exampleHourOfExecution, exampleMinuteOfExecution, &clockReaderMock);
 
     DateTime currentTime = DateTime(2010, 1, 1, 4, 59, 1);
 
-    AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, exampleHourOfExecution, exampleMinuteOfExecution, 1);
+    AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, 
+                                           exampleHourOfExecution, exampleMinuteOfExecution, 1);
 }
 
 void test_Execution_Next_Day(void)
@@ -75,11 +77,13 @@ void test_Execution_Next_Day(void)
     int exampleMinuteOfExecution = 20;
 
     ClockReaderMock clockReaderMock = ClockReaderMock();
-    ExecutionDecider executionDecider = ExecutionDecider(8, 450, exampleHourOfExecution, exampleMinuteOfExecution, &clockReaderMock);
+    ExecutionDecider executionDecider = 
+        ExecutionDecider(8, 450, exampleHourOfExecution, exampleMinuteOfExecution, &clockReaderMock);
 
     DateTime currentTime = DateTime(2010, 1, 1, 23, 59, 3);
 
-    AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, exampleHourOfExecution, exampleMinuteOfExecution, 3);
+    AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, 
+                                          exampleHourOfExecution, exampleMinuteOfExecution, 1);
 }
 
 void test_Execution_Almost_Full_Day_Ahead(void)
@@ -88,11 +92,13 @@ void test_Execution_Almost_Full_Day_Ahead(void)
     int exampleMinuteOfExecution = 20;
 
     ClockReaderMock clockReaderMock = ClockReaderMock();
-    ExecutionDecider executionDecider = ExecutionDecider(8, 450, exampleHourOfExecution, exampleMinuteOfExecution, &clockReaderMock);
+    ExecutionDecider executionDecider = 
+        ExecutionDecider(8, 450, exampleHourOfExecution, exampleMinuteOfExecution, &clockReaderMock);
 
     DateTime currentTime = DateTime(2010, 1, 1, 1, 30, 0);
 
-    AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, exampleHourOfExecution, exampleMinuteOfExecution, 3);
+    AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, 
+                                           exampleHourOfExecution, exampleMinuteOfExecution, 1);
 }
 
 void test_Starting_Exactly_At_Execution_Time(void)
@@ -101,11 +107,13 @@ void test_Starting_Exactly_At_Execution_Time(void)
     int exampleMinuteOfExecution = 20;
 
     ClockReaderMock clockReaderMock = ClockReaderMock();
-    ExecutionDecider executionDecider = ExecutionDecider(8, 450, exampleHourOfExecution, exampleMinuteOfExecution, &clockReaderMock);
+    ExecutionDecider executionDecider = 
+        ExecutionDecider(8, 450, exampleHourOfExecution, exampleMinuteOfExecution, &clockReaderMock);
 
     DateTime currentTime = DateTime(2010, 1, 1, 1, 20, 0);
 
-    AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, exampleHourOfExecution, exampleMinuteOfExecution, 3);
+    AssertExecutionDeciderTiggersCorrectly(currentTime, &clockReaderMock, executionDecider, 
+                                           exampleHourOfExecution, exampleMinuteOfExecution, 1);
 }
 
 void doTestExecution()
