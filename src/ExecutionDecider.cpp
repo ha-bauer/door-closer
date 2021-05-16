@@ -29,14 +29,6 @@ DateTime ExecutionDecider::calculateTimeOfNextExecution(DateTime now)
 {
     DateTime todaysExecutionTime = DateTime(now.year(), now.month(), now.day(), hourOfExecution, minuteOfExecution, 0);
 
-    PRINT(INT_TO_STR(now.year()));
-
-    PRINT("Execution is today: " +
-                   toString(todaysExecutionTime) + " " +
-                   toString(now) + " " +
-                   INT_TO_STR(todaysExecutionTime.unixtime()) + " " +
-                   INT_TO_STR(now.unixtime()));
-
     bool isNextExecutionToday = todaysExecutionTime >= now;
     if (isNextExecutionToday)
     {
@@ -97,12 +89,8 @@ void ExecutionDecider::watchdogInterruptHappened(uint32_t watchdogTickCounter)
     bool shouldSyncWithRtcClock = (watchdogTicksSinceSync > 0 && watchdogTicksSinceSync % this->rtcSyncIntervalInCycles == 0);
     if (shouldSyncWithRtcClock)
     {
-        PRINT("sync");
         syncWithRtcAndResetCounters();
     }
-
-    String msg = "Decider: " + INT_TO_STR(unixTimeAtExecution) + " " + INT_TO_STR(calculatedUnixTimeNow);
-    PRINT(msg);
 }
 
 bool ExecutionDecider::shouldWeExecute()
