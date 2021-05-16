@@ -56,23 +56,33 @@ void ExecutionDecider::syncWithRtcAndResetCounters()
 
 void ExecutionDecider::watchdogInterruptHappened(uint32_t watchdogTickCounter)
 {
-    if (watchdogTickCounter == 0)
+    watchdogTicksCurrently = watchdogTickCounter;
+
+    if (watchdogTicksCurrently == 0)
     {
         DateTime now = clockReader->activateRtcClockAndReadTime();
         uint32_t unixtimeNow = now.unixtime();
 
         timeOfNextExecution = calculateTimeOfNextExecution(now);
         unixtimeAtSync = unixtimeNow;
-        watchdogTickCounterAtSync = watchdogTickCounter;
+        watchdogTickCounterAtSync = watchdogTicksCurrently;
     }
 
-    watchdogTicksSinceSync = watchdogTickCounter - watchdogTickCounterAtSync;
+    watchdogTicksSinceSync = watchdogTicksCurrently - watchdogTickCounterAtSync;
 
     calculatedSecondsSinceSync =
         watchdogTicksSinceSync * secondsPerSleepCycle * deviationFactor;
 
     uint32_t unixTimeAtExecution = timeOfNextExecution.unixtime();
     uint32_t calculatedUnixTimeNow = unixtimeAtSync + calculatedSecondsSinceSync;
+
+    // String msg = 
+    //     "unixTimeAtSync: " + to_string(unixtimeAtSync) + " " +
+    //     to_string(calculatedUnixTimeNow) + " " + to_string(DateTime(calculatedUnixTimeNow)) + " " +
+    //     to_string(unixTimeAtExecution) + " " + to_string(DateTime(unixTimeAtExecution)) + " " +
+    //     "deviationFactor: " + to_string(deviationFactor) + " " +
+    //     "\n";
+    // PRINT(msg);
 
     bool isTimeToExecute = (calculatedUnixTimeNow >= unixTimeAtExecution);
     if (isTimeToExecute)
@@ -89,6 +99,7 @@ void ExecutionDecider::watchdogInterruptHappened(uint32_t watchdogTickCounter)
     bool shouldSyncWithRtcClock = (watchdogTicksSinceSync > 0 && watchdogTicksSinceSync % this->rtcSyncIntervalInCycles == 0);
     if (shouldSyncWithRtcClock)
     {
+        // PRINT("syncing");
         syncWithRtcAndResetCounters();
     }
 }

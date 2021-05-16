@@ -24,7 +24,7 @@
 #endif
 
 
-String toString(DateTime dt)
+String to_string(DateTime dt)
 {
     String result;
 

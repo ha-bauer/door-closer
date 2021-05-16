@@ -25,6 +25,6 @@
     std::string to_string(long value);
 #endif
 
-String toString(DateTime dt);
+String to_string(DateTime dt);
 
 #endif
