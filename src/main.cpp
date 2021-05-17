@@ -14,7 +14,7 @@ const int dirPin = 11;
 const int delayHigh = 800;
 const int delayLow = 800;
 const int stepsPerRevolution = 1600;
-const double numRotations = 0.5;
+const double numRotations = 3.0;
 
 const int hourOfExecution = 0;
 const int minuteOfExecution = 4;
