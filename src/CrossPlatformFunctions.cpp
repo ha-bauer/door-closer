@@ -38,7 +38,7 @@ String to_string(DateTime dt)
         resultStream << unsigned(dt.day()) << " ";
         resultStream << unsigned(dt.hour()) << ":";
         resultStream << unsigned(dt.minute()) << ":";
-        resultStream << unsigned(dt.second()) << " ";
+        resultStream << unsigned(dt.second());
         result = resultStream.str();
     #endif
 
