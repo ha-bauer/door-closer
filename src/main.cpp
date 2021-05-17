@@ -15,13 +15,14 @@ const int delayLow = 800;
 const int stepsPerRevolution = 1600;
 const double numRotations = 0.5;
 
-const int hourOfExecution = 18;
-const int minuteOfExecution = 50;
+const int hourOfExecution = 0;
+const int minuteOfExecution = 4;
 
 static volatile uint32_t watchdogTickCounter = 0;
 static ClockReader clockReader;
-static ExecutionDecider executionDecider;
-static DoorCloser doorCloser;
+static ExecutionDecider executionDecider =  ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution, &clockReader);
+static DoorCloser doorCloser = DoorCloser();
+
 
 void enter_sleep(void);
 void startWatchdogTimer();
@@ -40,8 +41,7 @@ void setup()
     closerConfig.stepsPerRevolution = stepsPerRevolution;
     closerConfig.numRotations = numRotations;
 
-    doorCloser = DoorCloser(closerConfig);
-    executionDecider =  ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution, &clockReader);
+    doorCloser.init(closerConfig);
     clockReader = ClockReader();
 }
 
