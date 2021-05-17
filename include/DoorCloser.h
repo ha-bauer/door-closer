@@ -22,7 +22,7 @@ class DoorCloser
     void doRotation(int direction, double numRotations);
 
 public:
-    DoorCloser(struct doorCloserConfig config);
+    void init(struct doorCloserConfig config);
     void closeDoor();
 };
 

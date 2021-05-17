@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <DoorCloser.h>
 
-DoorCloser::DoorCloser(struct doorCloserConfig config)
+void DoorCloser::init(struct doorCloserConfig config)
 {
     this->config = config;
 }
