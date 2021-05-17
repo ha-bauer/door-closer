@@ -7,6 +7,7 @@
 
 struct doorCloserConfig
 {
+    int powerSwitchPin;
     int stepPin;
     int dirPin;
     int delayHigh;

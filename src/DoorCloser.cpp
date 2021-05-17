@@ -10,12 +10,17 @@ void DoorCloser::init(struct doorCloserConfig config)
 
 void DoorCloser::closeDoor()
 {
+    pinMode(config.powerSwitchPin, OUTPUT);
+    digitalWrite(config.powerSwitchPin, HIGH);
+
     pinMode(config.stepPin, OUTPUT);
     pinMode(config.dirPin, OUTPUT);
 
     doRotation(LOW, config.numRotations);    
     delay(1000);
     doRotation(HIGH, config.numRotations); 
+
+    digitalWrite(config.powerSwitchPin, LOW);
 }
 
 void DoorCloser::doRotation(int direction, double numRotations)

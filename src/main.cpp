@@ -8,6 +8,7 @@
 #include "ClockReaderBase.h"
 #include "DoorCloser.h"
 
+const int motorPowerSwitchPin = 8;
 const int stepPin = 10;
 const int dirPin = 11;
 const int delayHigh = 800;
@@ -20,7 +21,10 @@ const int minuteOfExecution = 4;
 
 static volatile uint32_t watchdogTickCounter = 0;
 static ClockReader clockReader;
-static ExecutionDecider executionDecider =  ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution, &clockReader);
+
+static ExecutionDecider executionDecider = 
+    ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution, &clockReader);
+
 static DoorCloser doorCloser = DoorCloser();
 
 
@@ -34,6 +38,7 @@ void setup()
     startWatchdogTimer();
 
     static struct doorCloserConfig closerConfig;
+    closerConfig.powerSwitchPin = motorPowerSwitchPin;
     closerConfig.stepPin = stepPin;
     closerConfig.dirPin = dirPin;
     closerConfig.delayHigh = delayHigh;
@@ -47,6 +52,8 @@ void setup()
 
 void loop()
 {
+    doorCloser.closeDoor();
+    
     executionDecider.watchdogInterruptHappened(watchdogTickCounter);
 
     if (executionDecider.shouldWeExecute())
