@@ -2,19 +2,6 @@
 #include "ClockReaderBase.h"
 #include "CrossPlatformFunctions.h"
 
-#ifdef ARDUINO
-    #include <RTClib.h>
-#else
-    #include <iostream>
-    #include <sstream>
-    #include <string>
-    
-    #include "DateTime.h"
-    #include "TimeSpan.h"
-    using DateTimeUnitTesting::DateTime;
-    using DateTimeUnitTesting::TimeSpan;
-#endif
-
 ExecutionDecider::ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase* clockReader)
 {
     this->secondsPerSleepCycle = secondsPerSleepCycle;
@@ -77,12 +64,11 @@ void ExecutionDecider::watchdogInterruptHappened(uint32_t watchdogTickCounter)
     uint32_t calculatedUnixTimeNow = unixtimeAtSync + calculatedSecondsSinceSync;
 
     // String msg = 
-    //     "atSync: " + to_string(DateTime(unixtimeAtSync)) + " (" + to_string(unixtimeAtSync) + ") " +
-    //     "calculated: " + to_string(DateTime(calculatedUnixTimeNow)) + " " +
-    //     "atExecution: " + to_string(DateTime(unixTimeAtExecution)) + " " +
-    //     "deviationFactor: " + to_string(deviationFactor* 1000) + "/1000" +
-    //     "\n";
-    // PRINT(msg);
+    //     "atSync: " + date2string(unixtimeAtSync) + " (" + date2string(unixtimeAtSync) + ") " +
+    //     "calculated: " + date2string(DateTime(calculatedUnixTimeNow)) + " " +
+    //     "atExecution: " + date2string(DateTime(unixTimeAtExecution)) + " " +
+    //     "deviationFactor: " + date2string(deviationFactor * 1000) + "/1000";
+    // PRINTLN(msg);
 
     bool isTimeToExecute = (calculatedUnixTimeNow >= unixTimeAtExecution);
     if (isTimeToExecute)
@@ -99,7 +85,7 @@ void ExecutionDecider::watchdogInterruptHappened(uint32_t watchdogTickCounter)
     bool shouldSyncWithRtcClock = (watchdogTicksSinceSync > 0 && watchdogTicksSinceSync % this->rtcSyncIntervalInCycles == 0);
     if (shouldSyncWithRtcClock)
     {
-        // PRINT("syncing");
+        // PRINTLN("syncing");
         syncWithRtcAndResetCounters();
     }
 }

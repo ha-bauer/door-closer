@@ -4,9 +4,8 @@
 
 #ifdef ARDUINO
     #include <RTClib.h>
-    #define INT_TO_STR(int) String(int)
     #define PRINT(str) Serial.print(str)
-    #define C_STR(str) str.c_str()
+    #define PRINTLN(str) Serial.print(str + "\n");
 #else
     #include <iostream>
     #include <sstream>
@@ -16,15 +15,10 @@
     #include "TimeSpan.h"
     
     #define String std::string
-    #define INT_TO_STR(value) to_string(value)
-    #define PRINT(str) std::cout << str
-    #define C_STR(str) str.substr(0, str.size()).c_str()
-    
-    using namespace DateTimeUnitTesting;
-
-    std::string to_string(long value);
+    #define PRINT(str) std::cout << str;
+    #define PRINTLN(str) std::cout << str << std::endl;
 #endif
 
-String to_string(DateTime dt);
+String date2string(DateTime dt);
 
 #endif

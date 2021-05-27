@@ -1,18 +1,12 @@
 #include <unity.h>
+#include "RTClib.h"
 #include "ExecutionDecider.h"
 #include "ClockReaderMock.h"
-#include "CrossPlatformFunctions.h"
 
 #ifdef ARDUINO
-#include <Arduino.h>
+    #include <Arduino.h>
 #else
-#include <sstream>
-#include <string>
-
-#include "DateTime.h"
-#include "TimeSpan.h"
-using DateTimeUnitTesting::DateTime;
-using DateTimeUnitTesting::TimeSpan;
+    #include "ArduinoFake.h"
 #endif
 
 String ProbeExecutionDecider(DateTime startTime, ClockReaderMock *clockReaderMock, ExecutionDecider executionDecider,
@@ -38,11 +32,11 @@ String ProbeExecutionDecider(DateTime startTime, ClockReaderMock *clockReaderMoc
                 result = result + " | ";
             }
             result = result +
-                     to_string(currentTime.year()) + "-" +
-                     to_string(currentTime.month()) + "-" +
-                     to_string(currentTime.day()) + " " +
-                     to_string(currentTime.hour()) + ":" +
-                     to_string(currentTime.minute());
+                     String(currentTime.year()) + "-" +
+                     String(currentTime.month()) + "-" +
+                     String(currentTime.day()) + " " +
+                     String(currentTime.hour()) + ":" +
+                     String(currentTime.minute());
         }
 
         i++;

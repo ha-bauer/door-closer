@@ -1,6 +1,9 @@
 #ifdef ARDUINO
+    #include <Arduino.h>
+#else
+    #include "ArduinoFake.h"
+#endif
 
-#include <Arduino.h>
 #include <DoorCloser.h>
 
 void DoorCloser::init(struct doorCloserConfig config)
@@ -35,5 +38,3 @@ void DoorCloser::doRotation(int direction, double numRotations)
         delayMicroseconds(config.delayLow);
     }
 }
-
-#endif

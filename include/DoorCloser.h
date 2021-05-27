@@ -1,9 +1,5 @@
-#ifdef ARDUINO
-
 #ifndef DOOR_CLOSER_H
 #define DOOR_CLOSER_H
-
-#include <Arduino.h>
 
 struct doorCloserConfig
 {
@@ -27,5 +23,4 @@ public:
     void closeDoor();
 };
 
-#endif
 #endif

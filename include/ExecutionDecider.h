@@ -4,13 +4,6 @@
 #include "ClockReader.h"
 #include "ClockReaderBase.h"
 
-#ifdef ARDUINO
-    #include <RTClib.h>
-#else
-    #include "DateTime.h"
-    using namespace DateTimeUnitTesting;
-#endif
-
 class ExecutionDecider
 {
     int hourOfExecution;

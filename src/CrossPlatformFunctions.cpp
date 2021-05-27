@@ -2,8 +2,6 @@
 
 #ifdef ARDUINO
     #include <RTClib.h>
-    #define INT_TO_STR(int) String(int)
-    #define PRINT(str) Serial.print(str)
 #else
     #include <iostream>
     #include <sstream>
@@ -11,20 +9,10 @@
     #define String std::string
     #include "DateTime.h"
     #include "TimeSpan.h"
-    #define INT_TO_STR(value) to_string(value)
-    #define PRINT(str) std::cout << str
-    using namespace DateTimeUnitTesting;
-
-    std::string to_string(long value)
-    {
-        std::stringstream resultStream;
-        resultStream << unsigned(value);
-        return resultStream.str();
-    }
 #endif
 
 
-String to_string(DateTime dt)
+String date2string(DateTime dt)
 {
     String result;
 
