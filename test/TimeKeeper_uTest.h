@@ -7,10 +7,11 @@
 class TimeKeeper_uTest
 {
     static void letTimeRun(DateTime startTime, DateTime endTime, ClockReaderMock *clockReaderMock, 
-                        TimeKeeper timeKeeper, double timerInterval);
+                        TimeKeeper *timeKeeper, double timerInterval);
 
   public:
     static void test_Time_Keeper_Basically_Works(void);
+    static void test_Time_Keeper_Works_With_Deviation(void);
 };
 
 #endif

@@ -9,15 +9,31 @@ TimeKeeper::TimeKeeper(uint8_t definedSecondsPerSleepCycle, uint32_t rtcSyncInte
     this->rtcSyncIntervalInCycles = rtcSyncIntervalInCycles;
     this->clockReader = clockReader;
     this->deviationFactor = 1.0;
+    this->watchdogTicksCurrently = 0;
+    this->watchdogTickCounterAtSync = 1;
+}
+
+double TimeKeeper::calculateDeviationFactor(uint32_t timeAfter, uint32_t timeBefore, uint32_t calculatedDelta)
+{
+    uint32_t actualDelta = timeAfter - timeBefore;
+    double deviationFactor = ((double) actualDelta) / ((double) calculatedSecondsSinceSync);
+    return deviationFactor;
 }
 
 void TimeKeeper::syncWithRtcAndResetCounters()
 {
     DateTime now = clockReader->activateRtcClockAndReadTime();
     uint32_t unixtimeNow = now.unixtime();
-    uint32_t actualSecondsSinceSync = unixtimeNow - unixtimeAtSync;
 
-    deviationFactor = ((double) actualSecondsSinceSync) / ((double) calculatedSecondsSinceSync);
+    if(watchdogTicksCurrently > 1)
+    {
+        deviationFactor = calculateDeviationFactor(unixtimeNow, unixtimeAtSync, calculatedSecondsSinceSync);
+    }
+    else
+    {
+        deviationFactor = 1;
+    }
+
     unixtimeAtSync = unixtimeNow;
     watchdogTickCounterAtSync = watchdogTicksCurrently;
 }
@@ -26,16 +42,14 @@ void TimeKeeper::watchdogInterruptHappened()
 {
     watchdogTicksCurrently++;
 
-    if (watchdogTicksCurrently == 0)
-    {
-        DateTime now = clockReader->activateRtcClockAndReadTime();
-        uint32_t unixtimeNow = now.unixtime();
-
-        unixtimeAtSync = unixtimeNow;
-        watchdogTickCounterAtSync = watchdogTicksCurrently;
-    }
-
     watchdogTicksSinceSync = watchdogTicksCurrently - watchdogTickCounterAtSync;
+
+    bool shouldSyncWithRtcClock = (watchdogTicksSinceSync % this->rtcSyncIntervalInCycles == 0);
+    if (shouldSyncWithRtcClock)
+    {
+        PRINTLN("syncing");
+        syncWithRtcAndResetCounters();
+    }
 
     calculatedSecondsSinceSync =
         watchdogTicksSinceSync * definedSecondsPerSleepCycle * deviationFactor;
@@ -43,18 +57,10 @@ void TimeKeeper::watchdogInterruptHappened()
     currentCalculatedTime = unixtimeAtSync + calculatedSecondsSinceSync;
 
     // String msg = 
-    //     "atSync: " + date2string(unixtimeAtSync) + " (" + date2string(unixtimeAtSync) + ") " +
-    //     "calculated: " + date2string(DateTime(calculatedUnixTimeNow)) + " " +
-    //     "atExecution: " + date2string(DateTime(unixTimeAtExecution)) + " " +
-    //     "deviationFactor: " + date2string(deviationFactor * 1000) + "/1000";
+    //     "atSync: " + NUMBER_TO_STR(unixtimeAtSync) + " (" + date2string(DateTime(unixtimeAtSync)) + ") " +
+    //     "calculated: " + NUMBER_TO_STR(currentCalculatedTime) + " (" + date2string(DateTime(currentCalculatedTime)) + ") " +
+    //     "deviationFactor: " + NUMBER_TO_STR(deviationFactor);
     // PRINTLN(msg);
-
-    bool shouldSyncWithRtcClock = (watchdogTicksSinceSync > 0 && watchdogTicksSinceSync % this->rtcSyncIntervalInCycles == 0);
-    if (shouldSyncWithRtcClock)
-    {
-        // PRINTLN("syncing");
-        syncWithRtcAndResetCounters();
-    }
 }
 
 uint32_t TimeKeeper::getTime()

@@ -21,6 +21,7 @@ class TimeKeeper
 
     DateTime activateRtcClockAndReadTime();
     void syncWithRtcAndResetCounters();
+    double calculateDeviationFactor(uint32_t timeAfter, uint32_t timeBefore, uint32_t calculatedDelta);
 
 public:
     TimeKeeper(uint8_t definedSecondsPerSleepCycle, uint32_t rtcSyncIntervalInCycles, ClockReaderBase* clockReader);

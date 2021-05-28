@@ -14,6 +14,7 @@ void doTestExecution()
     RUN_TEST(ExecutionDecider_uTest::test_Many_Days_With_Deviation);
 
     RUN_TEST(TimeKeeper_uTest::test_Time_Keeper_Basically_Works);
+    RUN_TEST(TimeKeeper_uTest::test_Time_Keeper_Works_With_Deviation);
 
     UNITY_END();
 }
