@@ -1,16 +1,14 @@
 #include <unity.h>
-#include "RTClib.h"
-#include "ExecutionDecider.h"
 #include "ClockReaderMock.h"
+#include "ExecutionDecider_uTest.h"
 
-#ifdef ARDUINO
-    #include <Arduino.h>
-#else
-    #include "ArduinoFake.h"
-#endif
-
-String ProbeExecutionDecider(DateTime startTime, ClockReaderMock *clockReaderMock, ExecutionDecider executionDecider,
-                             int hourOfExecution, int minuteOfExecution, int numberOfDaysToCheck, double timerInterval)
+String ExecutionDecider_uTest::ProbeExecutionDecider(DateTime startTime, 
+                                                     ClockReaderMock *clockReaderMock,
+                                                     ExecutionDecider executionDecider,
+                                                     int hourOfExecution,
+                                                     int minuteOfExecution,
+                                                     int numberOfDaysToCheck,
+                                                     double timerInterval)
 {
     String result;
 
@@ -45,12 +43,12 @@ String ProbeExecutionDecider(DateTime startTime, ClockReaderMock *clockReaderMoc
     return result;
 }
 
-void AssertStringAreEqual(String str1, String str2)
+void AssertStringsAreEqual(String str1, String str2)
 {
     TEST_ASSERT_EQUAL_STRING(str1.c_str(), str2.c_str());
 }
 
-void test_Execution_Decider_Basically_Request_Execution_Correctly(void)
+void ExecutionDecider_uTest::test_Execution_Decider_Basically_Request_Execution_Correctly(void)
 {
     int exampleHourOfExecution = 5;
     int exampleMinuteOfExecution = 32;
@@ -64,10 +62,10 @@ void test_Execution_Decider_Basically_Request_Execution_Correctly(void)
     String executionLog = ProbeExecutionDecider(currentTime, &clockReaderMock, executionDecider,
                                                 exampleHourOfExecution, exampleMinuteOfExecution, 2, 8);
 
-    AssertStringAreEqual("2010-1-1 5:32 | 2010-1-2 5:32", executionLog);
+    AssertStringsAreEqual("2010-1-1 5:32 | 2010-1-2 5:32", executionLog);
 }
 
-void test_Execution_Next_Day(void)
+void ExecutionDecider_uTest::test_Execution_Next_Day(void)
 {
     int exampleHourOfExecution = 1;
     int exampleMinuteOfExecution = 20;
@@ -81,10 +79,10 @@ void test_Execution_Next_Day(void)
     String executionLog = ProbeExecutionDecider(currentTime, &clockReaderMock, executionDecider,
                                                 exampleHourOfExecution, exampleMinuteOfExecution, 2, 8);
 
-    AssertStringAreEqual("2010-1-2 1:20 | 2010-1-3 1:20", executionLog);
+    AssertStringsAreEqual("2010-1-2 1:20 | 2010-1-3 1:20", executionLog);
 }
 
-void test_Execution_Almost_Full_Day_Ahead(void)
+void ExecutionDecider_uTest::test_Execution_Almost_Full_Day_Ahead(void)
 {
     int exampleHourOfExecution = 1;
     int exampleMinuteOfExecution = 20;
@@ -98,10 +96,10 @@ void test_Execution_Almost_Full_Day_Ahead(void)
     String executionLog = ProbeExecutionDecider(currentTime, &clockReaderMock, executionDecider,
                                                 exampleHourOfExecution, exampleMinuteOfExecution, 2, 8);
 
-    AssertStringAreEqual("2010-1-2 1:20 | 2010-1-3 1:20", executionLog);
+    AssertStringsAreEqual("2010-1-2 1:20 | 2010-1-3 1:20", executionLog);
 }
 
-void test_Starting_Exactly_At_Execution_Time(void)
+void ExecutionDecider_uTest::test_Starting_Exactly_At_Execution_Time(void)
 {
     int exampleHourOfExecution = 1;
     int exampleMinuteOfExecution = 20;
@@ -115,10 +113,10 @@ void test_Starting_Exactly_At_Execution_Time(void)
     String executionLog = ProbeExecutionDecider(currentTime, &clockReaderMock, executionDecider,
                                                 exampleHourOfExecution, exampleMinuteOfExecution, 1, 8);
 
-    AssertStringAreEqual("2010-1-1 1:20 | 2010-1-2 1:20", executionLog);
+    AssertStringsAreEqual("2010-1-1 1:20 | 2010-1-2 1:20", executionLog);
 }
 
-void test_With_Deviation_Of_Timer(void)
+void ExecutionDecider_uTest::test_With_Deviation_Of_Timer(void)
 {
     int exampleHourOfExecution = 1;
     int exampleMinuteOfExecution = 20;
@@ -132,10 +130,10 @@ void test_With_Deviation_Of_Timer(void)
     String executionLog = ProbeExecutionDecider(currentTime, &clockReaderMock, executionDecider,
                                                 exampleHourOfExecution, exampleMinuteOfExecution, 2, 8.34);
 
-    AssertStringAreEqual("2010-1-1 1:20 | 2010-1-2 1:20", executionLog);
+    AssertStringsAreEqual("2010-1-1 1:20 | 2010-1-2 1:20", executionLog);
 }
 
-void test_Many_Days_With_Deviation(void)
+void ExecutionDecider_uTest::test_Many_Days_With_Deviation(void)
 {
     int exampleHourOfExecution = 1;
     int exampleMinuteOfExecution = 20;
@@ -156,49 +154,5 @@ void test_Many_Days_With_Deviation(void)
                                 "2010-1-10 1:20 | 2010-1-11 1:20 | 2010-1-12 1:20 | " + 
                                 "2010-1-13 1:20 | 2010-1-14 1:20";
 
-    AssertStringAreEqual(expectedLog,executionLog);
+    AssertStringsAreEqual(expectedLog,executionLog);
 }
-
-void doTestExecution()
-{
-    UNITY_BEGIN();
-
-    RUN_TEST(test_Execution_Decider_Basically_Request_Execution_Correctly);
-    RUN_TEST(test_Execution_Next_Day);
-    RUN_TEST(test_Execution_Almost_Full_Day_Ahead);
-    RUN_TEST(test_Starting_Exactly_At_Execution_Time);
-    RUN_TEST(test_With_Deviation_Of_Timer);
-    RUN_TEST(test_Many_Days_With_Deviation);
-
-    UNITY_END();
-}
-
-#ifdef ARDUINO
-
-#include <Arduino.h>
-void setup()
-{
-    // NOTE!!! Wait for >2 secs
-    // if board doesn't support software reset via Serial.DTR/RTS
-    delay(2000);
-
-    doTestExecution();
-}
-
-void loop()
-{
-    digitalWrite(13, HIGH);
-    delay(100);
-    digitalWrite(13, LOW);
-    delay(500);
-}
-
-#else
-
-int main(int argc, char **argv)
-{
-    doTestExecution();
-    return 0;
-}
-
-#endif

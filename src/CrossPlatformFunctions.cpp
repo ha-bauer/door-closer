@@ -1,17 +1,5 @@
 #include "CrossPlatformFunctions.h"
 
-#ifdef ARDUINO
-    #include <RTClib.h>
-#else
-    #include <iostream>
-    #include <sstream>
-    #include <string>
-    #define String std::string
-    #include "DateTime.h"
-    #include "TimeSpan.h"
-#endif
-
-
 String date2string(DateTime dt)
 {
     String result;
