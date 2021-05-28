@@ -53,7 +53,8 @@ void setup()
 }
 
 void loop()
-{   
+{
+    timeKeeper.watchdogInterruptHappened();
     executionDecider.watchdogInterruptHappened(watchdogTickCounter);
 
     if (executionDecider.shouldWeExecute())
