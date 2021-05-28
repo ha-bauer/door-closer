@@ -4,6 +4,7 @@
 #include <avr/sleep.h>
 #include <avr/power.h>
 #include <avr/wdt.h>
+#include "TimeKeeper.h"
 #include "ExecutionDecider.h"
 #include "ClockReaderBase.h"
 #include "DoorCloser.h"
@@ -21,9 +22,10 @@ const double numRotations = 3.0;
 
 static volatile uint32_t watchdogTickCounter = 0;
 static ClockReader clockReader;
+static TimeKeeper timeKeeper = TimeKeeper(8, 450, &clockReader);
 
 static ExecutionDecider executionDecider = 
-    ExecutionDecider(8, 450, hourOfExecution, minuteOfExecution, &clockReader);
+    ExecutionDecider(hourOfExecution, minuteOfExecution, &timeKeeper);
 
 static DoorCloser doorCloser = DoorCloser();
 

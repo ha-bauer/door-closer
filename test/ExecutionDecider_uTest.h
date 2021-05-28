@@ -6,8 +6,9 @@
 
 class ExecutionDecider_uTest
 {
-    static String ProbeExecutionDecider(DateTime startTime,
-                                        ClockReaderMock *clockReaderMock, 
+    static String ProbeExecutionDecider(DateTime startTime, 
+                                        ClockReaderMock *clockReaderMock,
+                                        TimeKeeper *timeKeeper,
                                         ExecutionDecider executionDecider,
                                         int hourOfExecution,
                                         int minuteOfExecution,

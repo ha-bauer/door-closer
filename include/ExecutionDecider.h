@@ -1,35 +1,23 @@
 #ifndef EXECUTION_DECIDER_H
 #define EXECUTION_DECIDER_H
 
-#include "ClockReader.h"
-#include "ClockReaderBase.h"
+#include "TimeKeeper.h"
 
 class ExecutionDecider
 {
     int hourOfExecution;
     int minuteOfExecution;
 
-    int secondsPerSleepCycle;
-    int rtcSyncIntervalInCycles;
-    uint32_t watchdogTickCounterAtSync;
-    uint32_t watchdogTicksSinceSync;
-    uint32_t watchdogTicksCurrently;
-    uint32_t unixtimeAtSync;
-    uint32_t calculatedSecondsSinceSync;
-
-    double deviationFactor;
-
+    uint32_t watchdogTicksCounter;
     DateTime timeOfNextExecution;
     bool shouldExecute;
 
-    ClockReaderBase* clockReader;
+    TimeKeeper* timeKeeper;
 
-    DateTime calculateTimeOfNextExecution(DateTime now);
-    DateTime activateRtcClockAndReadTime();
-    void syncWithRtcAndResetCounters();
+    DateTime calculateTimeOfNextExecution(uint32_t unixtimeNow);
 
 public:
-    ExecutionDecider(int secondsPerSleepCycle, uint32_t rtcSyncIntervalInCycles, int hourOfExecution, int minuteOfExecution, ClockReaderBase* clockReader);
+    ExecutionDecider(int hourOfExecution, int minuteOfExecution, TimeKeeper* timeKeeper);
     void watchdogInterruptHappened(uint32_t watchdogTickCounter);
     bool shouldWeExecute();
 };

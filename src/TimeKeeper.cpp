@@ -47,7 +47,7 @@ void TimeKeeper::watchdogInterruptHappened()
     bool shouldSyncWithRtcClock = (watchdogTicksSinceSync % this->rtcSyncIntervalInCycles == 0);
     if (shouldSyncWithRtcClock)
     {
-        PRINTLN("syncing");
+        // PRINTLN("syncing");
         syncWithRtcAndResetCounters();
     }
 
