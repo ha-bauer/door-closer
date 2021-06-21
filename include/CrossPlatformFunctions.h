@@ -5,7 +5,7 @@
 #ifdef ARDUINO
     #include <RTClib.h>
     #define PRINT(str) Serial.print(str)
-    #define PRINTLN(str) Serial.print(str + "\n");
+    #define PRINTLN(str) Serial.print(str); Serial.print("\n");
     #define NUMBER_TO_STR(value) String(value)
 #else
     #include <iostream>
