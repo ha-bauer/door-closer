@@ -5,7 +5,8 @@ String date2string(DateTime dt)
     String result;
 
     #ifdef ARDUINO
-        result = dt.toString("YYYY-MM-DD hh:mm:ss");
+        char format[] = "YYYY-MM-DD hh:mm:ss";
+        result = dt.toString(format);
 
     #else
         std::stringstream resultStream;
