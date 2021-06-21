@@ -8,7 +8,7 @@ class ExecutionDecider
     int hourOfExecution;
     int minuteOfExecution;
 
-    uint32_t watchdogTicksCounter;
+    uint32_t watchdogTicksCounter = 0;
     DateTime timeOfNextExecution;
     bool shouldExecute;
 
@@ -18,7 +18,7 @@ class ExecutionDecider
 
 public:
     ExecutionDecider(int hourOfExecution, int minuteOfExecution, TimeKeeper* timeKeeper);
-    void watchdogInterruptHappened(uint32_t watchdogTickCounter);
+    void watchdogInterruptHappened();
     bool shouldWeExecute();
 };
 

@@ -5,7 +5,7 @@
 #ifdef ARDUINO
     #include <RTClib.h>
     #define PRINT(str) Serial.print(str)
-    #define PRINTLN(str) Serial.print(str); Serial.print("\n");
+    #define PRINTLN(str) Serial.println(str);
     #define NUMBER_TO_STR(value) String(value)
 #else
     #include <iostream>
@@ -22,5 +22,6 @@
 #endif
 
 String date2string(DateTime dt);
+String date2stringShort(DateTime dt);
 
 #endif

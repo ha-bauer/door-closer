@@ -20,7 +20,6 @@ const int delayLow = 800;
 const int stepsPerRevolution = 1600;
 const double numRotations = 3.0;
 
-static volatile uint32_t watchdogTickCounter = 0;
 static ClockReader clockReader;
 static TimeKeeper timeKeeper = TimeKeeper(8, 450, &clockReader);
 
@@ -55,7 +54,7 @@ void setup()
 void loop()
 {
     timeKeeper.watchdogInterruptHappened();
-    executionDecider.watchdogInterruptHappened(watchdogTickCounter);
+    executionDecider.watchdogInterruptHappened();
 
     if (executionDecider.shouldWeExecute())
     {
@@ -63,11 +62,6 @@ void loop()
     }
 
     enter_sleep();
-}
-
-ISR(WDT_vect)
-{
-    watchdogTickCounter++;
 }
 
 void startWatchdogTimer()

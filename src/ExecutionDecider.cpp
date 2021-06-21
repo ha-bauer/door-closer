@@ -27,10 +27,8 @@ DateTime ExecutionDecider::calculateTimeOfNextExecution(uint32_t unixtimeNow)
     }
 }
 
-void ExecutionDecider::watchdogInterruptHappened(uint32_t watchdogTickCounter)
+void ExecutionDecider::watchdogInterruptHappened()
 {
-    watchdogTicksCounter = watchdogTickCounter;
-
     if (watchdogTicksCounter == 0)
     {
         uint32_t now = timeKeeper->getTime();
@@ -58,6 +56,8 @@ void ExecutionDecider::watchdogInterruptHappened(uint32_t watchdogTickCounter)
     {
         shouldExecute = false;
     }
+
+    watchdogTicksCounter++;
 }
 
 bool ExecutionDecider::shouldWeExecute()

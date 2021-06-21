@@ -6,14 +6,15 @@ void doTestExecution()
 {
     UNITY_BEGIN();
 
-    RUN_TEST(ExecutionDecider_uTest::test_Execution_Decider_Basically_Request_Execution_Correctly);
+    RUN_TEST(ExecutionDecider_uTest::test_Execution_Decider_Basically_Requests_Execution_Correctly);
     RUN_TEST(ExecutionDecider_uTest::test_Execution_Next_Day);
     RUN_TEST(ExecutionDecider_uTest::test_Execution_Almost_Full_Day_Ahead);
     RUN_TEST(ExecutionDecider_uTest::test_Starting_Exactly_At_Execution_Time);
     RUN_TEST(ExecutionDecider_uTest::test_With_Deviation_Of_Timer);
     RUN_TEST(ExecutionDecider_uTest::test_Many_Days_With_Deviation);
 
-    RUN_TEST(TimeKeeper_uTest::test_Time_Keeper_Basically_Works);
+    RUN_TEST(TimeKeeper_uTest::test_Time_Keeper_Basically_Works_With_Short_Interval);
+    RUN_TEST(TimeKeeper_uTest::test_Time_Keeper_Basically_Works_With_Longer_Interval);
     RUN_TEST(TimeKeeper_uTest::test_Time_Keeper_Works_With_Deviation);
 
     UNITY_END();

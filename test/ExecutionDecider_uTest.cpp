@@ -1,6 +1,7 @@
 #include <unity.h>
 #include "ClockReaderMock.h"
 #include "ExecutionDecider_uTest.h"
+#include "CrossPlatformFunctions.h"
 
 String ExecutionDecider_uTest::ProbeExecutionDecider(DateTime startTime, 
                                                      ClockReaderMock *clockReaderMock,
@@ -22,21 +23,19 @@ String ExecutionDecider_uTest::ProbeExecutionDecider(DateTime startTime,
         currentTime = startTime + TimeSpan(timerInterval * i);
         clockReaderMock->setCurrentDateTime(currentTime);
         timeKeeper->watchdogInterruptHappened();
-        executionDecider.watchdogInterruptHappened(i);
+        executionDecider.watchdogInterruptHappened();
         bool executionRequested = executionDecider.shouldWeExecute();
 
         if (executionRequested)
         {
+            PRINTLN("currentTime:" + date2string(currentTime));
+            PRINTLN("timeKeeper->getTime():" + date2string(timeKeeper->getTime()));
             if (result.length() > 0)
             {
                 result = result + " | ";
             }
-            result = result +
-                     String(currentTime.year()) + "-" +
-                     String(currentTime.month()) + "-" +
-                     String(currentTime.day()) + " " +
-                     String(currentTime.hour()) + ":" +
-                     String(currentTime.minute());
+
+            result = result + date2stringShort(currentTime);
         }
 
         i++;
@@ -50,7 +49,7 @@ void AssertStringsAreEqual(String str1, String str2)
     TEST_ASSERT_EQUAL_STRING(str1.c_str(), str2.c_str());
 }
 
-void ExecutionDecider_uTest::test_Execution_Decider_Basically_Request_Execution_Correctly(void)
+void ExecutionDecider_uTest::test_Execution_Decider_Basically_Requests_Execution_Correctly(void)
 {
     int exampleHourOfExecution = 5;
     int exampleMinuteOfExecution = 32;
@@ -60,7 +59,7 @@ void ExecutionDecider_uTest::test_Execution_Decider_Basically_Request_Execution_
     ExecutionDecider executionDecider =
         ExecutionDecider(exampleHourOfExecution, exampleMinuteOfExecution, &timeKeeper);
 
-    DateTime currentTime = DateTime(2010, 1, 1, 4, 59, 1);
+    DateTime currentTime = DateTime(2010, 1, 1, 4, 51, 1);
 
     String executionLog = ProbeExecutionDecider(currentTime, &clockReaderMock, &timeKeeper, executionDecider,
                                                 exampleHourOfExecution, exampleMinuteOfExecution, 2, 8);

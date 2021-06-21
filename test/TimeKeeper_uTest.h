@@ -10,7 +10,8 @@ class TimeKeeper_uTest
                         TimeKeeper *timeKeeper, double timerInterval);
 
   public:
-    static void test_Time_Keeper_Basically_Works(void);
+    static void test_Time_Keeper_Basically_Works_With_Short_Interval(void);
+    static void test_Time_Keeper_Basically_Works_With_Longer_Interval(void);
     static void test_Time_Keeper_Works_With_Deviation(void);
 };
 

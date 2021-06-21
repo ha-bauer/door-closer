@@ -10,7 +10,7 @@ TimeKeeper::TimeKeeper(uint8_t definedSecondsPerSleepCycle, uint32_t rtcSyncInte
     this->clockReader = clockReader;
     this->deviationFactor = 1.0;
     this->watchdogTicksCurrently = 0;
-    this->watchdogTickCounterAtSync = 1;
+    this->watchdogTickCounterAtSync = 0;
 }
 
 double TimeKeeper::calculateDeviationFactor(uint32_t timeAfter, uint32_t timeBefore)
@@ -53,14 +53,12 @@ void TimeKeeper::syncWithRtcAndResetCounters()
 
 void TimeKeeper::watchdogInterruptHappened()
 {
-    watchdogTicksCurrently++;
-
     watchdogTicksSinceSync = watchdogTicksCurrently - watchdogTickCounterAtSync;
 
     bool shouldSyncWithRtcClock = (watchdogTicksCurrently % this->rtcSyncIntervalInCycles == 0);
     if (shouldSyncWithRtcClock)
     {
-        //PRINTLN("syncing");
+        // PRINTLN("syncing");
         syncWithRtcAndResetCounters();
     }
 
@@ -74,6 +72,8 @@ void TimeKeeper::watchdogInterruptHappened()
     //     "calculated: " + NUMBER_TO_STR(currentCalculatedTime) + " (" + date2string(DateTime(currentCalculatedTime)) + ") " +
     //     "deviationFactor: " + NUMBER_TO_STR(deviationFactor);
     // PRINTLN(msg);
+
+    watchdogTicksCurrently++;
 }
 
 uint32_t TimeKeeper::getTime()

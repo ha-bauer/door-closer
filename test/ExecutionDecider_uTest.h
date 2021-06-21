@@ -3,6 +3,7 @@
 
 #include "ExecutionDecider.h"
 #include "ClockReaderMock.h"
+#include "CrossPlatformFunctions.h"
 
 class ExecutionDecider_uTest
 {
@@ -16,7 +17,7 @@ class ExecutionDecider_uTest
                                         double timerInterval);
 
   public:
-    static void test_Execution_Decider_Basically_Request_Execution_Correctly(void);
+    static void test_Execution_Decider_Basically_Requests_Execution_Correctly(void);
     static void test_Execution_Next_Day(void);
     static void test_Execution_Almost_Full_Day_Ahead(void);
     static void test_Starting_Exactly_At_Execution_Time(void);
