@@ -33,7 +33,7 @@ void TimeKeeper::syncWithRtcAndResetCounters()
     DateTime now = clockReader->activateRtcClockAndReadTime();
     uint32_t unixtimeNow = now.unixtime();
 
-    if(watchdogTicksCurrently > 1)
+    if(watchdogTicksCurrently > 0)
     {
         deviationFactor = calculateDeviationFactor(unixtimeNow, unixtimeAtSync);
     }
@@ -53,14 +53,14 @@ void TimeKeeper::syncWithRtcAndResetCounters()
 
 void TimeKeeper::watchdogInterruptHappened()
 {
-    watchdogTicksSinceSync = watchdogTicksCurrently - watchdogTickCounterAtSync;
-
     bool shouldSyncWithRtcClock = (watchdogTicksCurrently % this->rtcSyncIntervalInCycles == 0);
     if (shouldSyncWithRtcClock)
     {
         // PRINTLN("syncing");
         syncWithRtcAndResetCounters();
     }
+
+    watchdogTicksSinceSync = watchdogTicksCurrently - watchdogTickCounterAtSync;
 
     calculatedSecondsSinceSync =
         watchdogTicksSinceSync * definedSecondsPerSleepCycle * deviationFactor;

@@ -26,10 +26,12 @@ String ExecutionDecider_uTest::ProbeExecutionDecider(DateTime startTime,
         executionDecider.watchdogInterruptHappened();
         bool executionRequested = executionDecider.shouldWeExecute();
 
+        // PRINTLN("currentTime:" + date2string(currentTime));
+        // PRINTLN("clockReaderMock->activateRtcClockAndReadTime():" + date2string(clockReaderMock->activateRtcClockAndReadTime()));
+        // PRINTLN("timeKeeper->getTime():" + date2string(timeKeeper->getTime()));
+
         if (executionRequested)
         {
-            PRINTLN("currentTime:" + date2string(currentTime));
-            PRINTLN("timeKeeper->getTime():" + date2string(timeKeeper->getTime()));
             if (result.length() > 0)
             {
                 result = result + " | ";
@@ -69,20 +71,20 @@ void ExecutionDecider_uTest::test_Execution_Decider_Basically_Requests_Execution
 
 void ExecutionDecider_uTest::test_Execution_Next_Day(void)
 {
-    int exampleHourOfExecution = 1;
-    int exampleMinuteOfExecution = 20;
+    int exampleHourOfExecution = 4;
+    int exampleMinuteOfExecution = 15;
 
     ClockReaderMock clockReaderMock = ClockReaderMock();
     TimeKeeper timeKeeper = TimeKeeper(8, 450, &clockReaderMock);
     ExecutionDecider executionDecider =
         ExecutionDecider(exampleHourOfExecution, exampleMinuteOfExecution, &timeKeeper);
 
-    DateTime currentTime = DateTime(2010, 1, 1, 23, 59, 3);
+    DateTime currentTime = DateTime(2010, 1, 1, 15, 21, 3);
 
     String executionLog = ProbeExecutionDecider(currentTime, &clockReaderMock, &timeKeeper, executionDecider,
                                                 exampleHourOfExecution, exampleMinuteOfExecution, 2, 8);
 
-    AssertStringsAreEqual("2010-1-2 1:20 | 2010-1-3 1:20", executionLog);
+    AssertStringsAreEqual("2010-1-2 4:15 | 2010-1-3 4:15", executionLog);
 }
 
 void ExecutionDecider_uTest::test_Execution_Almost_Full_Day_Ahead(void)
@@ -136,7 +138,7 @@ void ExecutionDecider_uTest::test_With_Deviation_Of_Timer(void)
     String executionLog = ProbeExecutionDecider(currentTime, &clockReaderMock, &timeKeeper, executionDecider,
                                                 exampleHourOfExecution, exampleMinuteOfExecution, 2, 8.34);
 
-    AssertStringsAreEqual("2010-1-1 1:20 | 2010-1-2 1:20", executionLog);
+    AssertStringsAreEqual("2010-1-1 1:20 | 2010-1-2 1:20 | 2010-1-3 1:20", executionLog);
 }
 
 void ExecutionDecider_uTest::test_Many_Days_With_Deviation(void)
