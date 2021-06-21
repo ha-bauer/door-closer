@@ -26,7 +26,7 @@ void TimeKeeper_uTest::test_Time_Keeper_Basically_Works(void)
         TimeKeeper(8, 450, &clockReaderMock);
 
     DateTime startTime = DateTime(2010, 1, 1, 4, 59, 1);
-    TimeSpan someTimeSpan = TimeSpan(0, 0, 5, 0);
+    TimeSpan someTimeSpan = TimeSpan(0, 0, 2, 0);
     DateTime endTime = startTime + someTimeSpan;
 
     letTimeRun(startTime, endTime, &clockReaderMock, &timeKeeper, 8.0);

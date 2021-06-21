@@ -8,7 +8,7 @@ class TimeKeeper
 {
     uint32_t currentCalculatedTime;
     uint8_t definedSecondsPerSleepCycle;
-    uint8_t rtcSyncIntervalInCycles;
+    uint32_t rtcSyncIntervalInCycles;
     uint32_t watchdogTickCounterAtSync;
     uint32_t watchdogTicksSinceSync;
     uint32_t watchdogTicksCurrently;
@@ -21,7 +21,7 @@ class TimeKeeper
 
     DateTime activateRtcClockAndReadTime();
     void syncWithRtcAndResetCounters();
-    double calculateDeviationFactor(uint32_t timeAfter, uint32_t timeBefore, uint32_t calculatedDelta);
+    double calculateDeviationFactor(uint32_t timeAfter, uint32_t timeBefore);
 
 public:
     TimeKeeper(uint8_t definedSecondsPerSleepCycle, uint32_t rtcSyncIntervalInCycles, ClockReaderBase* clockReader);
