@@ -10,7 +10,7 @@
 #include "DoorCloser.h"
 
 const int hourOfExecution = 4;
-const int minuteOfExecution = 0;
+const int minuteOfExecution = 15;
 
 const int motorPowerSwitchPin = 8;
 const int stepPin = 10;
@@ -49,18 +49,29 @@ void setup()
 
     doorCloser.init(closerConfig);
     clockReader = ClockReader();
+
+    //doorCloser.closeDoor();
+}
+
+ISR(WDT_vect)
+{
+    Serial.begin(9600); Serial.println("ISR");
 }
 
 void loop()
 {
+    // Serial.begin(9600); Serial.println("loop");
+    
     timeKeeper.watchdogInterruptHappened();
     executionDecider.watchdogInterruptHappened();
 
     if (executionDecider.shouldWeExecute())
     {
         doorCloser.closeDoor();
-    }
+        Serial.begin(9600); Serial.println("closing");
 
+    }
+    
     enter_sleep();
 }
 
