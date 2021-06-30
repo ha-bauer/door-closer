@@ -50,7 +50,7 @@ void setup()
     doorCloser.init(closerConfig);
     clockReader = ClockReader();
 
-    //doorCloser.closeDoor();
+    doorCloser.closeDoor();
 }
 
 ISR(WDT_vect)
